@@ -1,36 +1,15 @@
-# Home & Main Sections
+[build]
+command = "yarn build"
+publish = "build"
+
+# Home redirect
 [[redirects]]
 from = "/"
 to = "https://suites.dev/"
 status = 301
 force = true
 
-[[redirects]]
-from = "/search"
-to = "https://suites.dev/search"
-status = 301
-force = true
-
-# Documentation Pages
-[[redirects]]
-from = "/docs"
-to = "https://suites.dev/docs"
-status = 301
-force = true
-
-# Getting Started section
-[[redirects]]
-from = "/docs/category/getting-started"
-to = "https://suites.dev/docs/overview"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/getting-started"
-to = "https://suites.dev/docs/overview"
-status = 301
-force = true
-
+# Documentation redirects - specific paths first
 [[redirects]]
 from = "/docs/getting-started/installation"
 to = "https://suites.dev/docs/overview/installation"
@@ -38,121 +17,28 @@ status = 301
 force = true
 
 [[redirects]]
-from = "/docs/getting-started/motivation"
-to = "https://suites.dev/docs/overview/what-is-suites"
+from = "/docs/getting-started/*"
+to = "https://suites.dev/docs/overview/:splat"
 status = 301
 force = true
 
-[[redirects]]
-from = "/docs/getting-started/depdency-injection-and-automock"
-to = "https://suites.dev/docs/overview/problems-solved"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/getting-started/examples"
-to = "https://suites.dev/docs/overview/quickstart"
-status = 301
-force = true
-
-# Adapters section
-[[redirects]]
-from = "/docs/category/di-framework-adapters"
-to = "https://suites.dev/docs/developer-guide/adapters"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/adapters/intro"
-to = "https://suites.dev/docs/developer-guide/adapters"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/adapters/identifiers"
-to = "https://suites.dev/docs/developer-guide/adapters/identifiers"
-status = 301
-force = true
-
-# Extras section
-[[redirects]]
-from = "/docs/category/extras"
-to = "https://suites.dev/docs/developer-guide"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/extras/deep-mocking"
-to = "https://suites.dev/docs/developer-guide/unit-tests/test-doubles"
-status = 301
-force = true
-
-[[redirects]]
-from = "/docs/extras/identical-injections"
-to = "https://suites.dev/docs/developer-guide/unit-tests/solitary"
-status = 301
-force = true
-
-# Migration guide
-[[redirects]]
-from = "/docs/migrating"
-to = "https://suites.dev/docs/overview/migrating-from-automock"
-status = 301
-force = true
-
-# API Reference Pages
-[[redirects]]
-from = "/api-reference"
-to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
-status = 301
-force = true
-
-[[redirects]]
-from = "/api-reference/category/api-reference"
-to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
-status = 301
-force = true
-
-# Specific API components
-[[redirects]]
-from = "/api-reference/api/*"
-to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
-status = 301
-force = true
-
-# Error references
-[[redirects]]
-from = "/api-reference/category/errors-reference"
-to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
-status = 301
-force = true
-
-[[redirects]]
-from = "/api-reference/errors/common-errors"
-to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
-status = 301
-force = true
-
-# General catching rules for remaining paths
+# General documentation redirect
 [[redirects]]
 from = "/docs/*"
-to = "https://suites.dev/docs"
+to = "https://suites.dev/docs/:splat"
 status = 301
 force = true
 
+# API reference redirects
 [[redirects]]
 from = "/api-reference/*"
 to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
 status = 301
 force = true
 
-# Final catch-all redirect for any other paths
+# Catch-all redirect
 [[redirects]]
 from = "/*"
 to = "https://suites.dev"
 status = 301
 force = true
-
-[build]
-command = "yarn build"
-publish = "build"

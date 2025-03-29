@@ -133,7 +133,10 @@ const config = {
         },
       ],
     },
-    footer: false,
+    footer: {
+      style: 'dark',
+      copyright: `Released under the MIT License <br /> Copyright © 2020-2023 <strong>Omer Morad</strong> <br /> Hosted by Netlify`,
+    },
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,

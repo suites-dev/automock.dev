@@ -2,13 +2,6 @@
 command = "yarn build"
 publish = "build"
 
-# Home redirect
-[[redirects]]
-from = "/"
-to = "https://suites.dev/"
-status = 301
-force = true
-
 # Documentation redirects - specific paths first
 [[redirects]]
 from = "/docs/getting-started/installation"

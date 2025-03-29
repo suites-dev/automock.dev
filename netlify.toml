@@ -1,9 +1,13 @@
 [[redirects]]
-from = "/docs"
-to = "/docs/getting-started"
+from = "/docs/*"
+to = "/"
 status = 301
 
 [[redirects]]
-from = "/api-reference"
-to = "/api-reference/category/api-reference"
+from = "/api-reference/*"
+to = "/"
 status = 301
+
+[build]
+command = "yarn build"
+publish = "build"

@@ -1,34 +1,38 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import styles from './index.module.css';
+import Head from '@docusaurus/Head';
 
 function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <img className={styles.logo} src="img/logo.svg" alt="Automock Logo" />
-
-        <h1 className={styles.title}>{siteConfig.title}</h1>
-        <p className="hero__subtitle">
-          Focus on creating solid test suites, automate the generation of<br />mock objects, and improve the unit testing workflow.
-        </p>
+        <div className={styles.deprecationNotice}>
+          <h1 className={styles.title}>Automock has evolved into Suites</h1>
+          <p className={styles.subtitle}>
+            We've taken everything you loved about Automock and expanded it into Suites - a more powerful framework 
+            with enhanced capabilities for building robust test suites. Suites maintains Automock's core philosophy while 
+            adding new features to eliminate boilerplate code, simplify dependency management, and streamline your entire testing workflow.
+          </p>
+          <p className={styles.subtitle}>
+            All Automock projects can be migrated to Suites with minimal changes. Your existing knowledge and test patterns will transfer seamlessly.
+          </p>
+        </div>
         <div className={styles.buttons}>
           <Link
             className={styles.button}
-            to="/docs">
-            Read the Docs
+            to="https://suites.dev">
+            Go to Suites.dev
           </Link>
           &nbsp;
           &nbsp;
           &nbsp;
           <Link
             className={styles.button}
-            to="https://github.com/automock/automock">
-            Source Code
+            to="https://github.com/suites-dev/suites/tree/master/docs/automock">
+            Access Automock Docs
           </Link>
         </div>
       </div>
@@ -37,12 +41,13 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
-
   return (
     <Layout
-      title={siteConfig.title}
-      description="Standalone Library for Automated Mocking of Class Dependencies.">
+      title="Automock has evolved into Suites"
+      description="Automock has evolved into Suites - a more powerful meta-framework for building robust test suites, eliminating boilerplate, and streamlining your testing workflow.">
+      <Head>
+        <meta name="robots" content="noindex" />
+      </Head>
       <HomepageHeader />
     </Layout>
   );

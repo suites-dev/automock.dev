@@ -47,13 +47,6 @@ const config = {
         content: 'notranslate',
       },
     },
-    {
-      tagName: 'meta',
-      attributes: {
-        'http-equiv': 'refresh',
-        content: '0;url=https://suites.dev',
-      },
-    },
   ],
   i18n: {
     defaultLocale: 'en',

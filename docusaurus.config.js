@@ -75,25 +75,7 @@ const config = {
       },
     ],
   ],
-  plugins: [
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        redirects: [
-          {
-            from: ['/docs', '/docs/*', '/api-reference', '/api-reference/*'],
-            to: 'https://suites.dev',
-          },
-        ],
-        createRedirects(existingPath) {
-          if (existingPath.includes('/docs/') || existingPath.includes('/api-reference/')) {
-            return `https://suites.dev${existingPath}`;
-          }
-          return undefined;
-        },
-      },
-    ],
-  ],
+  plugins: [],
   themeConfig: {
     metadata: [
       { name: 'keywords', content: 'auto mocking, dependency injection, inversion of control, jest, sinon, nestjs, inversifyjs' },

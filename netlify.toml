@@ -29,9 +29,10 @@ to = "https://suites.dev/docs/developer-guide/unit-tests/suites-api"
 status = 301
 force = true
 
-# Catch-all redirect
+# Redirect all other paths except the homepage
 [[redirects]]
 from = "/*"
 to = "https://suites.dev"
 status = 301
 force = true
+conditions = {Path = ["!/"]}

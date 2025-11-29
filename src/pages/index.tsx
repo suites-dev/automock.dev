@@ -10,21 +10,31 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <div className={styles.deprecationNotice}>
-          <h1 className={styles.title}>Automock has evolved into Suites</h1>
+          <span className={styles.deprecationBadge}>NOTICE</span>
+          <h1 className={`${styles.title} ${styles.suitesColor}`}>Automock 2.x → Suites 3.x</h1>
           <p className={styles.subtitle}>
-            We've taken everything you loved about Automock and expanded it into Suites - a more powerful framework 
-            with enhanced capabilities for building robust test suites. Suites maintains Automock's core philosophy while 
-            adding new features to eliminate boilerplate code, simplify dependency management, and streamline your entire testing workflow.
+            Automock development stopped at version <code>2.1.0</code>. Starting from version <code>3.0.0</code>,
+            the project continues as <strong>Suites</strong>, the actively developed successor with new features
+            and improvements.
           </p>
           <p className={styles.subtitle}>
-            All Automock projects can be migrated to Suites with minimal changes. Your existing knowledge and test patterns will transfer seamlessly.
+            <strong>Automock 2.x</strong> will receive critical bug fixes only. All new development,
+            features, and enhancements are now released as <strong>Suites 3.x</strong>.
+          </p>
+          <p className={styles.subtitle}>
+            Migrate to Suites (version 3) to access the latest features and continued support.
+            Automated migration via <code>@suites/codemod</code> is planned for Q1 2026.
+          </p>
+          <p className={styles.subtitle}>
+            <strong>Deprecation Timeline:</strong> A formal deprecation date for Automock v2 will be announced
+            once <code>@suites/codemod</code> is stable to ensure a smooth automated migration path for all users.
           </p>
         </div>
         <div className={styles.buttons}>
           <Link
             className={styles.button}
             to="https://suites.dev">
-            Go to Suites.dev
+            Migrate to Suites
           </Link>
           &nbsp;
           &nbsp;
@@ -32,7 +42,7 @@ function HomepageHeader() {
           <Link
             className={styles.button}
             to="https://github.com/suites-dev/suites/tree/master/docs/automock">
-            Access Automock Docs
+            View Archived Docs
           </Link>
         </div>
       </div>
@@ -43,8 +53,8 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="Automock has evolved into Suites"
-      description="Automock has evolved into Suites - a more powerful meta-framework for building robust test suites, eliminating boilerplate, and streamlining your testing workflow.">
+      title="Automock 2.x → Suites 3.x"
+      description="Automock development stopped at version 2.1.0. Starting from version 3.0.0, the project continues as Suites with active development and new features.">
       <Head>
         <meta name="robots" content="noindex" />
       </Head>

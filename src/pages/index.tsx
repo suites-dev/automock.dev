@@ -36,9 +36,6 @@ function HomepageHeader() {
             to="https://suites.dev">
             Migrate to Suites
           </Link>
-          &nbsp;
-          &nbsp;
-          &nbsp;
           <Link
             className={styles.button}
             to="https://github.com/suites-dev/suites/wiki">

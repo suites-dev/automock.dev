@@ -41,7 +41,7 @@ function HomepageHeader() {
           &nbsp;
           <Link
             className={styles.button}
-            to="https://github.com/suites-dev/suites/tree/master/docs/automock">
+            to="https://github.com/suites-dev/suites/wiki/automock">
             View Archived Docs
           </Link>
         </div>

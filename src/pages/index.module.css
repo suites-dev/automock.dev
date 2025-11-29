@@ -54,9 +54,9 @@
 
 .deprecationBadge {
   display: inline-block;
-  background: rgba(65, 176, 203, 0.2);
-  border: 1px solid #41b0cb;
-  color: #41b0cb;
+  background: rgba(255, 152, 0, 0.2);
+  border: 1px solid #FF9800;
+  color: #FF9800;
   padding: 6px 16px;
   border-radius: 6px;
   font-size: 0.75rem;

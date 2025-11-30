@@ -1,79 +1,64 @@
 ---
+title: Identifiers and Tokens
 sidebar_position: 2
-title: Identifiers & Injection Tokens
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
+Throughout the Automock documentation, you'll encounter references to identifiers, guiding you on how to use them effectively in different contexts.
 
-Throughout the Automock documentation, you'll encounter references to identifiers, guiding you on how to use them
-effectively in different contexts.
+In Dependency Injection (DI), identifiers play a pivotal role in determining how dependencies are provided and resolved. This guide delves into the nuances of identifiers, shedding light on their significance and varied implementations across DI frameworks.
 
-In Dependency Injection (DI), identifiers play a pivotal role in determining how dependencies are provided and resolved.
-This guide delves into the nuances of identifiers, shedding light on their significance and varied implementations
-across DI frameworks.
-
-:::note
-It's important to note that the usage and support for different types of identifiers
-or metadata may vary from one adapter to another. If exists, refer to the specific adapter's documentation for detailed
-information.
-:::
-
-<br />
+**📝 Note**: It's important to note that the usage and support for different types of identifiers or metadata may vary from one adapter to another. If exists, refer to the specific adapter's documentation for detailed information.
 
 **Before diving in, ensure you've installed the appropriate adapter for your DI framework:**
 
-<Tabs groupId="automock-adapter" className="adapters-tabs" queryString="automock-adapter">
-  <TabItem attributes={{className: 'nestjs'}} value="nestjs" label="NestJS" default>
-    <CodeBlock language="bash">
-      {`$ npm i -D @automock/adapters.nestjs`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem attributes={{className: 'inversifyjs'}} value="inverisfyjs" label="InversifyJS">
-    <CodeBlock language="bash">
-      {`$ npm i -D @automock/adapters.inversify`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+**NestJS:**
 
-> :bulb: See the full installation guide [here](/docs/getting-started/installation)
+```bash
+npm i -D @automock/adapters.nestjs
+```
+
+**InversifyJS:**
+
+```bash
+npm i -D @automock/adapters.inversify
+```
+
+**💡 Tip**: See the full installation guide at [Installation](../getting-started/installation)
 
 ## Class-based Injection
 
-Class-based injection is a fundamental concept in Dependency Injection frameworks. It revolves around the idea of
-using actual TypeScript classes both as a blueprint for creating instances and as an identifier for fetching
-specific dependencies.
+Class-based injection is a fundamental concept in Dependency Injection frameworks. It revolves around the idea of using actual TypeScript classes both as a blueprint for creating instances and as an identifier for fetching specific dependencies.
 
-<Tabs groupId="automock-adapter" className="adapters-tabs" queryString="automock-adapter">
-  <TabItem attributes={{className: 'nestjs'}} value="nestjs" label="NestJS" default>
-    <CodeBlock language="typescript">
-      {`import \{ Injectable, Inject \} from '@nestjs/common'\;\n
+**NestJS:**
+
+```typescript
+import { Injectable, Inject } from '@nestjs/common';
+
 @Injectable()
 class UserService {
   constructor(private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem attributes={{className: 'inversifyjs'}} value="inverisfyjs" label="InversifyJS">
-    <CodeBlock language="typescript">
-      {`import \{ injectable, inject \} from 'inversify'\;\n
+}
+```
+
+**InversifyJS:**
+
+```typescript
+import { injectable, inject } from 'inversify';
+
 @injectable()
 class UserService {
   constructor(private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+}
+```
 
 **To resolve or mock a class-based dependency, just use the class itself.**
 
-```tsx title="UnitReference API"
+```typescript
 const { unitRef } = TestBed.create(UserService).compile();
 const userApiService = unitRef.get(ApiService);
 ```
 
-```tsx title="MockOverride API"
+```typescript
 const { unit, unitRef } = TestBed.create(UserService)
   .mock(ApiService)
   .using({ ... })
@@ -82,46 +67,44 @@ const { unit, unitRef } = TestBed.create(UserService)
 
 ## Token-based Injection
 
-Tokens, which can be strings or symbols, serve as unique keys to fetch specific dependencies from the container. They're
-especially useful for distinguishing multiple instances of the same type or for non-class-based dependencies.
+Tokens, which can be strings or symbols, serve as unique keys to fetch specific dependencies from the container. They're especially useful for distinguishing multiple instances of the same type or for non-class-based dependencies.
 
-Just like class-based injection, the core idea of token-based injection remains consistent across different DI
-frameworks, but the syntax and nuances differ. Below, we've provided examples for different frameworks to showcase
-how token-based injection is implemented in each.
+Just like class-based injection, the core idea of token-based injection remains consistent across different DI frameworks, but the syntax and nuances differ. Below, we've provided examples for different frameworks to showcase how token-based injection is implemented in each.
 
 ### Class as Token
 
 Sometimes, classes double up as injection tokens. Here's how:
 
-<Tabs groupId="automock-adapter" className="adapters-tabs" queryString="automock-adapter">
-  <TabItem attributes={{className: 'nestjs'}} value="nestjs" label="NestJS" default>
-    <CodeBlock language="typescript">
-      {`import \{ Injectable, Inject \} from '@nestjs/common'\;\n
+**NestJS:**
+
+```typescript
+import { Injectable, Inject } from '@nestjs/common';
+
 @Injectable()
 class UserService {
   constructor(@Inject(ApiService) private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem attributes={{className: 'inversifyjs'}} value="inverisfyjs" label="InversifyJS">
-    <CodeBlock language="typescript">
-      {`import \{ injectable, inject \} from 'inversify'\;\n
+}
+```
+
+**InversifyJS:**
+
+```typescript
+import { injectable, inject } from 'inversify';
+
 @injectable()
 class UserService {
   constructor(@inject(ApiService) private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+}
+```
 
 **Resolving or mocking such dependencies is straightforward; use the class itself:**
 
-```tsx title="UnitReference API"
+```typescript
 const { unitRef } = TestBed.create(UserService).compile();
 const userApiService = unitRef.get(ApiService);
 ```
 
-```tsx title="MockOverride API"
+```typescript
 const { unit, unitRef } = TestBed.create(UserService)
   .mock(ApiService)
   .using({ ... })
@@ -142,51 +125,50 @@ interface Logger {
 
 Also, consider the following constant as a token:
 
-<Tabs>
-  <TabItem value="string" label="String-Based Token">
-    <CodeBlock language="typescript">
-      {`export const LOGGER_TOKEN = 'LOGGER_TOKEN'`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="symbol" label="Symbol-Based Token">
-    <CodeBlock language="typescript">
-      {`export const LOGGER_TOKEN = Symbol.for('LOGGER_TOKEN')`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+**String-Based Token:**
 
-You probably added this token to your dependency injection framework so that it might find a class or object that
-corresponds to this interface and inject its implementation.
+```typescript
+export const LOGGER_TOKEN = 'LOGGER_TOKEN'
+```
 
-<Tabs groupId="automock-adapter" className="adapters-tabs" queryString="automock-adapter">
-  <TabItem attributes={{className: 'nestjs'}} value="nestjs" label="NestJS" default>
-    <CodeBlock language="typescript">
-      {`import \{ Injectable, Inject \} from '@nestjs/common'\;\n
+**Symbol-Based Token:**
+
+```typescript
+export const LOGGER_TOKEN = Symbol.for('LOGGER_TOKEN')
+```
+
+You probably added this token to your dependency injection framework so that it might find a class or object that corresponds to this interface and inject its implementation.
+
+**NestJS:**
+
+```typescript
+import { Injectable, Inject } from '@nestjs/common';
+
 @Injectable()
 class UserService {
   constructor(@Inject(LOGGER_TOKEN) private logger: Logger) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem attributes={{className: 'inversifyjs'}} value="inverisfyjs" label="InversifyJS">
-    <CodeBlock language="typescript">
-      {`import \{ injectable, inject \} from 'inversify'\;\n
+}
+```
+
+**InversifyJS:**
+
+```typescript
+import { injectable, inject } from 'inversify';
+
 @injectable()
 class UserService {
   constructor(@inject(LOGGER_TOKEN) private logger: Logger) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+}
+```
 
 **To resolve or mock a token-based dependency, use the token itself, whether it's a string or symbol:**
 
-```tsx title="UnitReference API"
+```typescript
 const { unitRef } = TestBed.create(UserService).compile();
 const logger = unitRef.get<Logger>(LOGGER_TOKEN);
 ```
 
-```tsx title="MockOverride API"
+```typescript
 const { unit, unitRef } = TestBed.create(UserService)
   .mock<Logger>(LOGGER_TOKEN)
   .using({ ... })
@@ -195,30 +177,29 @@ const { unit, unitRef } = TestBed.create(UserService)
 
 ### Circular Dependencies and Lazy Loading
 
-Circular dependencies, where two classes interdependent on each other, can be tricky. While best avoided, certain
-scenarios necessitate them. DI frameworks often provide mechanisms like lazy loading to handle such cases.
+Circular dependencies, where two classes interdependent on each other, can be tricky. While best avoided, certain scenarios necessitate them. DI frameworks often provide mechanisms like lazy loading to handle such cases.
 
-<Tabs groupId="automock-adapter" className="adapters-tabs" queryString="automock-adapter">
-  <TabItem attributes={{className: 'nestjs'}} value="nestjs" label="NestJS" default>
-    <CodeBlock language="typescript">
-      {`import \{ Injectable, Inject \} from '@nestjs/common'\;\n
+**NestJS:**
+
+```typescript
+import { Injectable, Inject } from '@nestjs/common';
+
 @Injectable()
 class UserService {
   constructor(@Inject(forwardRef(() => ApiService)) private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-  <TabItem attributes={{className: 'inversifyjs'}} value="inverisfyjs" label="InversifyJS">
-    <CodeBlock language="typescript">
-      {`import \{ injectable, inject, LazyServiceIdentifer \} from 'inversify'\;\n
+}
+```
+
+**InversifyJS:**
+
+```typescript
+import { injectable, inject, LazyServiceIdentifer } from 'inversify';
+
 @injectable()
 class UserService {
   constructor(@inject(new LazyServiceIdentifer(() => ApiService)) private apiService: ApiService) {}
-}`}
-    </CodeBlock>
-  </TabItem>
-</Tabs>
+}
+```
 
+**Resolving or mocking a circular dependency is akin to handling a regular identifier, sans the circular dependency wrapper.**
 
-**Resolving or mocking a circular dependency is akin to handling a regular identifier, sans the circular dependency
-wrapper.**

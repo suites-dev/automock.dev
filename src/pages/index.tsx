@@ -38,7 +38,7 @@ function HomepageHeader() {
           </Link>
           <Link
             className={styles.button}
-            to="https://github.com/suites-dev/suites/wiki">
+            to="/docs/">
             View Archived Docs
           </Link>
         </div>

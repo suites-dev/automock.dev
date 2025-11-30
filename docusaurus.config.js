@@ -56,7 +56,11 @@ const config = {
     [
       '@docusaurus/preset-classic',
       {
-        docs: false,
+        docs: {
+          path: 'docs',
+          routeBasePath: 'docs',
+          sidebarPath: require.resolve('./docs-sidebars.js'),
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -70,6 +74,13 @@ const config = {
   ],
   plugins: [],
   themeConfig: {
+    announcementBar: {
+      id: 'automock_migrated',
+      content: '⚠️ <strong>Automock has been migrated to Suites</strong> - Visit <a target="_blank" rel="noopener noreferrer" href="https://suites.dev">suites.dev</a> for the latest documentation and updates',
+      backgroundColor: '#fbbf24',
+      textColor: '#000000',
+      isCloseable: false,
+    },
     metadata: [
       { name: 'keywords', content: 'auto mocking, dependency injection, inversion of control, jest, sinon, nestjs, inversifyjs' },
       { name: 'description', content: 'Automock has been deprecated and transformed into Suites. Please visit suites.dev for the latest documentation.' },
@@ -97,7 +108,7 @@ const config = {
           label: 'Go to Suites',
         },
         {
-          href: 'https://github.com/suites-dev/suites/tree/master/docs/automock',
+          to: '/docs/',
           position: 'left',
           label: 'Archived Docs',
         },

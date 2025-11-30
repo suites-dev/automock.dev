@@ -1,0 +1,271 @@
+---
+title: TestBed API Reference
+sidebar_position: 1
+---
+
+## Usage Example
+
+Consider a simple example where you have a `UserService` class that relies on a `Database` service for data retrieval.
+
+```typescript
+import { TestBed } from '@automock/jest';
+
+class Database {
+  getUsers(): Promise<User[]> { ... }
+}
+
+class UserService {
+  constructor(private database: Database) {}
+
+  async getAllUsers(): Promise<User[]> {
+    return this.database.getUsers();
+  }
+}
+
+describe('User Service Unit Spec', () => {
+  let userService: UserService;
+  let database: jest.Mocked<Database>;
+
+  beforeAll(() => {
+    const { unit, unitRef } = TestBed.create(UserService).compile();
+    userService = unit;
+    database = unitRef.get(Database);
+  });
+
+  test('getAllUsers should retrieve users from the database', async () => {
+    const mockUsers: User[] = [{ id: 1, name: 'John' }, { id: 2, name: 'Jane' }];
+    database.getUsers.mockResolvedValue(mockUsers);
+
+    const users = await userService.getAllUsers();
+
+    expect(database.getUsers).toHaveBeenCalled();
+    expect(users).toEqual(mockUsers);
+  });
+});
+```
+
+In this example, Automock simplifies the creation of mock objects and stubs for the `Database` dependency. By utilizing the `TestBed`, you can create an instance of the `UserService` class with automatically generated mock objects for its dependencies.
+
+## TestBed API
+
+**Source package**: `@automock/jest`
+
+The `TestBed` API is a factory for creating `TestBedBuilder` instances.
+
+### `TestBed.create<TClass>(classToTest): TestBedBuilder<TClass>`
+
+The `TestBed.create(classToTest)` method initializes the `TestBed` with the class you want to test.
+
+**Parameters:**
+- `classToTest` - The class for which you want to create an instance
+
+**Returns:** `TestBedBuilder<TClass>`
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService);
+```
+
+## TestBedBuilder API
+
+**Source package**: `@automock/core`
+
+The `TestBedBuilder` interface provides methods for configuring and compiling the `TestBed`.
+
+### `.mock(type: Type<TDependency>): MockOverride<TDependency, TClass>`
+
+The `.mock(type)` method is used to declare a dependency to be mocked using its type.
+
+**Parameters:**
+- `type` - The type of the dependency to be mocked
+
+**Returns:** `MockOverride<TDependency, TClass>`
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService)
+  .mock(Database)
+  .using({ getUsers: async () => [] })
+  .compile();
+```
+
+### `.mock<TDependency>(token: string): MockOverride<TDependency, TClass>`
+
+The `.mock(token)` method is used to declare a dependency to be mocked using a token string.
+
+**Parameters:**
+- `token` - The token string representing the dependency to be mocked
+
+**Returns:** `MockOverride<TDependency, TClass>`
+
+**💡 Tip**: When using `.mock()` with a token, specify the type using the generic argument like `.mock<SomeType>('MY_TOKEN')` for better type safety.
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService)
+  .mock('CUSTOM_TOKEN')
+  .using({ ... })
+  .compile();
+```
+
+### `.compile(): UnitTestBed<TClass>`
+
+The `.compile()` method finalizes `TestBed` setup and returns an object containing the instance of the class under test (`unit`) and a reference to the mocked dependencies (`unitRef`).
+
+**Returns:** `{ unit: TClass, unitRef: UnitReference }`
+
+**Example:**
+
+```typescript
+const { unit, unitRef} = TestBed.create(UserService).compile();
+```
+
+## MockOverride API
+
+**Source package**: `@automock/core`
+
+The `MockOverride` interface provides methods for specifying the value or mock implementation to be used for a mocked dependency.
+
+### `.using(mockImplementation: TImpl): TestBedBuilder<TClass>`
+
+The `.using(mockImplementation)` method specifies the mock implementation to be used for the mocked dependency.
+
+**Parameters:**
+- `mockImplementation` - The mock implementation for the mocked dependency
+
+**Returns:** `TestBedBuilder<TClass>`
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService)
+  .mock(Database)
+  .using({ getUsers: async () => [{ id: 1, name: 'John' }] })
+  .compile();
+```
+
+**⚠️ Important**: When using `.using()` to provide a mock implementation, the subject being mocked will be replaced completely without any stubs. Methods not explicitly defined in the `mockImplementation` object will not have any behavior.
+
+To add stubs for specific methods:
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService)
+  .mock(Database)
+  .using({ getUsers: jest.fn().mockReturnValue([{ id: 1, name: 'John' }]) })
+  .compile();
+```
+
+### `.using(value: TValue): TestBedBuilder<TClass>` (since v1.2.0)
+
+The `.using(value)` method allows specifying fixed values to be used for mocked dependencies.
+
+**Parameters:**
+- `value` - The fixed value for the mocked dependency
+
+**Returns:** `TestBedBuilder<TClass>`
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService)
+  .mock('CUSTOM_TOKEN')
+  .using('some fixed value')
+  .compile();
+```
+
+## Dependency References and Instance Access
+
+When utilizing `TestBed`, the `compile()` method returns an object with two important properties:
+
+### `unit`
+
+The `unit` property represents the actual instance of the class under test. This allows you to directly interact with the class and invoke its methods during your test scenarios.
+
+### `unitRef`
+
+The `unitRef` property serves as a reference to the dependencies of the class under test. By accessing `unitRef`, you can retrieve the automatically generated mock object for dependencies using `unitRef.get()`.
+
+**Example:**
+
+```typescript
+const { unit, unitRef } = TestBed.create(UserService).compile();
+const userService = unit;
+const database = unitRef.get(Database);
+```
+
+## Deep Mocking
+
+Deep mocking can be a heavy operation and can lead to unexpected behavior. While Automock does not directly support deep mocking, here's an example of how it might be achieved manually:
+
+```typescript
+export class ClassWithModels {
+  public constructor(private models: PrismaService) {}
+  
+  public async findUsers(): Promise<User[]> {
+    return this.models.user.find();
+  }
+}
+
+beforeAll(() => {
+  const { unit, unitRef } = TestBed.create(ClassWithModels)
+    .mock(PrismaWrapperService)
+    .using({
+      models: {
+        user: { find: jest.fn() },
+        animal: { findUnique: jest.fn() },
+      },
+    })
+    .compile();
+});
+```
+
+**⚠️ Important**: Approach deep mocking with caution. It's generally recommended to focus on mocking only the direct dependencies of a class to keep tests clear and maintainable.
+
+## Handling Multiple Injections
+
+When the same class is injected multiple times, Automock will automatically mock all instances. However, `unitRef.get()` will only return the first injected dependency.
+
+**Solution**: Use unique identifiers (custom tokens) for each injection:
+
+```typescript
+class UserService {
+  public constructor(
+    @Inject('DATABASE_1') private readonly database1: Database,
+    @Inject('DATABASE_2') private readonly database2: Database,
+  ) {}
+
+  public async getUsers() {
+    const users1 = await this.database1.getUsers();
+    const users2 = await this.database2.getUsers();
+    return [...users1, ...users2];
+  }
+}
+```
+
+Then access each dependency using its token:
+
+```typescript
+const database1 = unitRef.get('DATABASE_1');
+const database2 = unitRef.get('DATABASE_2');
+```
+
+## Handling Undefined Values
+
+Automock may encounter `undefined` values while reflecting class dependencies due to:
+- Issues with type reflection
+- Unresolved dependencies from circular references
+- Improper parameter decoration
+
+### Warning Message
+
+```plaintext
+Automock has identified an undefined dependency with type or token '${name}' in class '${targetClass.name}'.
+This warning may be caused by improper parameter decoration, issues with type reflection, or unresolved dependencies
+due to circular references. Consider using the circular dependency resolution features provided by your DI framework.
+```
+
+This warning serves as a proactive measure to inform about potential issues with undefined dependencies.
+
